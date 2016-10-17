@@ -1,5 +1,5 @@
 /**
-  分数加减
+  分数定义及运算
  **/
 #ifndef __FRACTION_H__
 #define __FRACTION_H__
