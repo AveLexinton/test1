@@ -119,20 +119,40 @@ class Matrix {
 
         bool isEmpty() const {return nrow == 0 || ncol == 0;}
 
-        //取矩阵前n列
-        //Matrix getcols(int n) {
-          //  Matrix ret(nrow, n);
-            //for (int i = 0;i < nrow; ++i) {
-              //  copy(data.at(i).begin(), data.at(i).begin()+n, ret.data.begin());
-            //}
-            //return ret;            
-        //}
+        //右边添加一列
+        Matrix& addCol(const vector<T>& newcol) {
+            if (newcol.size() != nrow)
+                throw runtime_error("Error adding a column: rows does not match!");
+            for (int i = 0; i < newcol.size(); ++i)
+                data.at(i).push_back(newcol.at(i));
+            ++ncol;
+                
+            return *this;
+        }
+        //下边添加一行
+        Matrix& addRow(const vector<T>& newrow) {
+            if (newrow.size() != ncol)
+                throw runtime_error("Error adding a row: columns does not match!");
+            data.push_back(newrow);
+            ++nrow;
+            return *this;
+        }
 
-        //删除矩阵中的一行,行号从0开始
-        void rm_row(int rowno) {
+        //删除矩阵中的一行,行号从0开始，默认删除最后一行
+        void rm_row(int rowno=getNrow()-1) {
                 if (rowno>=nrow)
                         throw out_of_range("Error in Matrix: cannot remove the specified row due to out_of_range!");
                 data.erase(data.begin()+rowno);
+                --nrow;
+        }
+        //删除矩阵中指定一列，默认删除最后一列
+        void rm_col(int colno=getNcol()-1) {
+            if (colno>=ncol)
+                throw out_of_range("Error removing one column: out of range!");
+            for(auto& r : data) {
+                r.erase(r.begin()+getNcol()-1);
+            }
+            --ncol;
         }
 
         //矩阵转置

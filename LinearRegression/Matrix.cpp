@@ -181,11 +181,22 @@ int main() {
 //        else
 //                cout << "cannot solve!" << endl;
 
-        Matrix<Fraction<int>> m1{{1.00,2,string("6/2")},{4,1.0,2}, {0,5.0000,1}}, m2{{1},{1},{1}};
-        Matrix<Fraction<int>> t =  mat_union(m1,m2);
-        t.simplest_row_form();
-        cout << t << endl;
+//        Matrix<Fraction<int>> m1{{1.00,2,string("6/2")},{4,1.0,2}, {0,5.0000,1}}, m2{{1},{1},{1}};
+//        Matrix<Fraction<int>> t =  mat_union(m1,m2);
+//        t.simplest_row_form();
+//        cout << t << endl;
         //cout << solve(m1,m2).second << endl;
+
+        Matrix<Fraction<int>> m1{{1,2,3},{4,5,6}};
+        cout << m1 <<endl;
+        m1.addRow({7,8,9});
+        cout << m1 << endl;
+        m1.addCol({10,11,12});
+        cout << m1 << endl;
+        m1.rm_row(2);
+        cout << m1 << endl;
+        m1.rm_col(3);
+        cout << m1 << endl;
 
         //cout << "int_mat:" << endl << m2.int_mat() << endl;
         //Matrix<int> m1{{0,1,0},{1,2,1}};
