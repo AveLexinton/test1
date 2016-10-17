@@ -15,6 +15,8 @@ template<typename T> class Matrix;
 template<typename T>
 Matrix<T> mat_union(const Matrix<T>& A, const Matrix<T>& B);
 
+
+//只推荐使用Matrix<Fraction>， 其它版本未完整测试
 template<typename T>
 class Matrix {
         int nrow, ncol;
@@ -109,10 +111,10 @@ class Matrix {
                         std::fill(a.begin(), a.end(), val);
         }
 
-        void setRow(int i, vector<int>& v) {data.at(i) = move(v);}
+        void setRow(int i, vector<T>& v) {data.at(i) = move(v);}
 
         void setData(const initializer_list<initializer_list<T>>& ilil) {
-                data = move(vector<vector<int>>{ilil.begin(),ilil.end()});
+                data = move(vector<vector<T>>{ilil.begin(),ilil.end()});
         }
 
         bool isEmpty() const {return nrow == 0 || ncol == 0;}
@@ -134,7 +136,7 @@ class Matrix {
         }
 
         //矩阵转置
-        Matrix inverse() const {
+        Matrix invert() const {
                 Matrix resm(ncol,nrow);
                 for (int i =  0; i < nrow; ++i) {
                         for (int j = 0; j < ncol; ++j) {
@@ -149,11 +151,11 @@ class Matrix {
                 if (m.getNrow() != ncol)
                         throw invalid_argument("The number of the cols of the 1st matrix should match with that of the rows of the 2nd!");
                 Matrix res(nrow, m.getNcol());
-                Matrix inverse_m = m.inverse();
-                auto& inverse_data = inverse_m.getData();
+                Matrix invert_m = m.invert();
+                auto& invert_data = invert_m.getData();
                 for (int i = 0; i < nrow; ++i) {
                         for (int j = 0; j < m.getNcol(); ++j) {
-                                T val = inner_product(data.at(i).begin(), data.at(i).end(), inverse_data.at(j).begin(), 0);
+                                T val = inner_product(data.at(i).begin(), data.at(i).end(), invert_data.at(j).begin(), 0);
                                 res.set(i,j, val);
                         }
                 }
@@ -183,9 +185,6 @@ class Matrix {
                 }
         }
 
-       //按行，使成为整数矩阵 
-        Matrix<int> int_mat() const;
-    
         //水平粘合矩阵 A|B
         friend Matrix mat_union<>(const Matrix& A, const Matrix& B);
 };
