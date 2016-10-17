@@ -72,14 +72,14 @@ Matrix<T> mat_union(const Matrix<T>& A, const Matrix<T>& B) {
                         auto end = copy(A.data.at(i).begin(), A.data.at(i).end(), ret.data.at(i).begin());
                         copy(B.data.at(i).begin(), B.data.at(i).end(), end);
                 }
-                return ret;
+              return ret;
         } else if (!A.isEmpty())
                 return A;
 
         return B;
 }
 
-//子函数：用来实现求解AX=b,  求出X, (A|b)，只求解n个未知数n个方程类型的线性方程组
+//子函数：用来实现求解AX=b,  求出X, (A|b)，目前只求解n个未知数n个方程类型的线性方程组
 template<typename T>
 pair<bool, Matrix<T>> solve_b(Matrix<T> mat) { //返回pair中第一个bool值表示有没有解
        if (mat.getNcol() < 1) {
@@ -181,8 +181,8 @@ int main() {
 //        else
 //                cout << "cannot solve!" << endl;
 
-        Matrix<Fraction<>> m1{{1,2,3},{4,1,2}, {0,5,1}}, m2{{1},{1},{1}};
-        Matrix<Fraction<>> t =  mat_union(m1,m2);
+        Matrix<Fraction<int>> m1{{1.00,2,string("6/2")},{4,1.0,2}, {0,5.0000,1}}, m2{{1},{1},{1}};
+        Matrix<Fraction<int>> t =  mat_union(m1,m2);
         t.simplest_row_form();
         cout << t << endl;
         //cout << solve(m1,m2).second << endl;

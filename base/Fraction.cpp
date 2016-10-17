@@ -6,7 +6,7 @@
 namespace std {
     template<>
     Fraction<> numeric_limits<Fraction<>>::max() {
-        return Fraction<>(numeric_limits<long long>::max(), 1);
+        return Fraction<>(numeric_limits<long long>::max(), static_cast<long long>(1));
     }
 }
 

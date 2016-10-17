@@ -59,10 +59,20 @@ static constexpr double y = 3.332;
 C(const int c):v(c){}
 };
  
+
+class D{
+public:
+int x;
+D(auto v):x(v){}
+void p(int d){cout << "p(int)" << endl;}
+void p(long long d){cout << "p(long long)" << endl;}
+};
 int main()
 {
-    C c{12};
-    cout << c.x << endl << c.y; 
+    D d(10);    
+    d.p(12ll);
+    //C c{12};
+    //cout << c.x << endl << c.y; 
    // B<int> x{10};
     //B<int> b;
     //b.pA(x);

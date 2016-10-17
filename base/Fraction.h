@@ -17,7 +17,7 @@ template<typename ValueType=long long>
 class Fraction {
         ValueType fenzi, fenmu;
 
-        static constexpr magnitude = 1e6; //小数点有效位数,for 小数转分数
+        static constexpr long long magnitude = 1e6; //小数点有效位数,for 小数转分数
 
         public:
         //构造函数
@@ -50,6 +50,9 @@ class Fraction {
         Fraction(const double& d) {
                 fenzi = static_cast<ValueType>(d*magnitude);                                
                 fenmu = magnitude;
+                ValueType gcd_fzm = gcd(fenzi, fenmu);
+                fenzi /= gcd_fzm;
+                fenmu /= gcd_fzm;
         } 
         
     
