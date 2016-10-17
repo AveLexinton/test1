@@ -17,6 +17,8 @@ template<typename ValueType=long long>
 class Fraction {
         ValueType fenzi, fenmu;
 
+        static constexpr magnitude = 1e6; //小数点有效位数,for 小数转分数
+
         public:
         //构造函数
         Fraction(ValueType afenzi = 0, ValueType afenmu = 1) {
@@ -29,7 +31,7 @@ class Fraction {
                 }
         };
 
-        //字符串构造函数
+        //字符串构造函数，以字符串形式将分数构造成Fraction，如"4/5"
         Fraction(const string& str) {
                 const regex fraction_regex{"-?([0-9]+)(/[1-9]([0-9]*))?"};
                 if (!regex_match(str, fraction_regex)) {//如果不是一个分数
@@ -44,7 +46,13 @@ class Fraction {
                     fenmu = stoi(str.substr(slash_pos+1));
                 }
         }
+        //小数构造函数，将double构造成Fraction
+        Fraction(const double& d) {
+                fenzi = static_cast<ValueType>(d*magnitude);                                
+                fenmu = magnitude;
+        } 
         
+    
         //拷贝构造函数
         Fraction(const Fraction& f){
                 //dbgcout << "Log: Fraction move constructor invoked!" << endl;
@@ -93,22 +101,23 @@ class Fraction {
         ValueType getFenzi()const{return fenzi;};
         ValueType getFenmu()const{return fenmu;};
 
-        //打印
-        //friend ostream& operator<<(ostream& os, const Fraction& fr);
+        //转换为字符串
+        operator string(){
+            if (fenzi == 0)
+                return "0";
+            else if (fenzi == numeric_limits<ValueType>::max())
+                return "inf";
+            else if (fenmu == 1)
+                return to_string(fenzi);
+
+            return to_string(fenzi)+"/"+to_string(fenmu);
+        }
 };
 
 //打印
 template<typename ValueType>
 ostream& operator<<(ostream& os, const Fraction<ValueType>& fr){
-  if (fr.getFenzi() == 0)
-    cout << "0";
-  else if (fr == numeric_limits<Fraction<ValueType>>::max())
-    cout << "INF";
-  else if (fr.getFenmu() == 1) {
-    cout << fr.getFenzi();
-  } else
-    cout << fr.getFenzi() << '/' << fr.getFenmu();
-  return os;
+  return os << static_cast<string>(const_cast<Fraction<ValueType>&>(fr));
 }
 
 //分数加法
