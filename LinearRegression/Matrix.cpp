@@ -72,7 +72,7 @@ Matrix<T> mat_union(const Matrix<T>& A, const Matrix<T>& B) {
                         auto end = copy(A.data.at(i).begin(), A.data.at(i).end(), ret.data.at(i).begin());
                         copy(B.data.at(i).begin(), B.data.at(i).end(), end);
                 }
-              return ret;
+                return ret;
         } else if (!A.isEmpty())
                 return A;
 
@@ -82,51 +82,51 @@ Matrix<T> mat_union(const Matrix<T>& A, const Matrix<T>& B) {
 //子函数：用来实现求解AX=b,  求出X, (A|b)，目前只求解n个未知数n个方程类型的线性方程组
 template<typename T>
 pair<bool, Matrix<T>> solve_b(Matrix<T> mat) { //返回pair中第一个bool值表示有没有解
-       if (mat.getNcol() < 1) {
-               throw invalid_argument("Error in solve<T>: empty matrix needs not be solved!");
-               return make_pair(false, Matrix<T>());
-       }
-       if (mat.getNrow() != mat.getNcol()-1)     //如果A不是方阵，不进行求解
-               return make_pair(false, Matrix<T>());
+        if (mat.getNcol() < 1) {
+                throw invalid_argument("Error in solve<T>: empty matrix needs not be solved!");
+                return make_pair(false, Matrix<T>());
+        }
+        if (mat.getNrow() != mat.getNcol()-1)     //如果A不是方阵，不进行求解
+                return make_pair(false, Matrix<T>());
 
-       Matrix<T> ret(mat.getNcol()-1, 1);
-       ret.fill(numeric_limits<T>::max());     //填充上最大值，没有修改的话，则标志了自由变元，即该位置自变量取所有值
+        Matrix<T> ret(mat.getNcol()-1, 1);
+        ret.fill(numeric_limits<T>::max());     //填充上最大值，没有修改的话，则标志了自由变元，即该位置自变量取所有值
 
-       mat.simplest_row_form();
+        mat.simplest_row_form();
 
-       vector<int> zeroline_no;
-       for(int i = 0; i < mat.getNrow(); ++i) { //找出全0行
-               if (all_of(mat.getData().at(i).begin(), mat.getData().at(i).end()-1, [](const T& temp){return temp==0;})) {
-                       if (mat.getData().at(i).at(mat.getNcol()-1) != 0)
-                               return make_pair(false, ret); //该线性方程组无解，直接返回
-                       else //(A|b)第i行全为0, 添加到标记中，准备后面统一删除
-                               zeroline_no.push_back(i);
-               }
-       }
-       //从后向前删除矩阵中的行，保证要删除的行号的有效性
-       for(auto a = zeroline_no.crbegin(); a != zeroline_no.crend(); ++a)
-               mat.rm_row(*a);
+        vector<int> zeroline_no;
+        for(int i = 0; i < mat.getNrow(); ++i) { //找出全0行
+                if (all_of(mat.getData().at(i).begin(), mat.getData().at(i).end()-1, [](const T& temp){return temp==0;})) {
+                        if (mat.getData().at(i).at(mat.getNcol()-1) != 0)
+                                return make_pair(false, ret); //该线性方程组无解，直接返回
+                        else //(A|b)第i行全为0, 添加到标记中，准备后面统一删除
+                                zeroline_no.push_back(i);
+                }
+        }
+        //从后向前删除矩阵中的行，保证要删除的行号的有效性
+        for(auto a = zeroline_no.crbegin(); a != zeroline_no.crend(); ++a)
+                mat.rm_row(*a);
 
-       //从最后一行开始，反向求解。每一行找到非零元素连续序列头尾两个指针pos1, pos2
-       for (auto r = mat.getData().crbegin(); r != mat.getData().crend(); ++r) {
-               int pos1 = 0, pos2 = r->size()-2; //指向倒数第二个
-               for(; r->at(pos1) == 0; ++pos1); //找到第一个非零元素位置
-               for(; r->at(pos2) == 0; --pos2); //找到最后一个非零元素位置
-               T temp = *(r->end()-1);
-               for(; pos2 != pos1; --pos2) {
-                       if (r->at(pos2) == 0)
-                               continue;
-                       if (ret.getData().at(pos2).at(0) == numeric_limits<T>::max()) {
-                               ret.set(pos2, 0, 1);
-                               temp -= r->at(pos2);
-                       } else {
-                               temp -= r->at(pos2)*ret.getData().at(pos2).at(0);
-                       }
-               }
-               ret.set(pos1, 0, temp/r->at(pos1));
-       }
+        //从最后一行开始，反向求解。每一行找到非零元素连续序列头尾两个指针pos1, pos2
+        for (auto r = mat.getData().crbegin(); r != mat.getData().crend(); ++r) {
+                int pos1 = 0, pos2 = r->size()-2; //指向倒数第二个
+                for(; r->at(pos1) == 0; ++pos1); //找到第一个非零元素位置
+                for(; r->at(pos2) == 0; --pos2); //找到最后一个非零元素位置
+                T temp = *(r->end()-1);
+                for(; pos2 != pos1; --pos2) {
+                        if (r->at(pos2) == 0)
+                                continue;
+                        if (ret.getData().at(pos2).at(0) == numeric_limits<T>::max()) {
+                                ret.set(pos2, 0, 1);
+                                temp -= r->at(pos2);
+                        } else {
+                                temp -= r->at(pos2)*ret.getData().at(pos2).at(0);
+                        }
+                }
+                ret.set(pos1, 0, temp/r->at(pos1));
+        }
 
-       return make_pair(true, ret);
+        return make_pair(true, ret);
 }
 
 
@@ -139,7 +139,7 @@ pair<bool, Matrix<T>> solve(const Matrix<T>& A, const Matrix<T>& B) { //返回pa
                 return  make_pair(false, Matrix<T>());
         if (A.getNrow() != A.getNcol())     //如果A不是方阵，不进行求解
                 return make_pair(false, Matrix<T>());
-        
+
         Matrix<T> ret;//(A.getNcol(), B.getNcol());
         //取B的第i列和A粘起来，从solve_b求解a得到c，粘到ret右边
         for (int i = 0; i < B.getNcol(); ++i) {
@@ -173,18 +173,18 @@ int main() {
         //m0.simplest_row_form();
         //cout << m0 << endl;
 
-//        Matrix<Fraction> m1{{0,1,2},{2,2,3},{4,1,6},{1,1,1},{2,1,1}};
-//        Matrix<Fraction> m2{{2,0,1,2,3},{2,1,1,1,1},{1,3,2,1,2},{2,2,2,1,2},{1,0,1,2,1}};
-//        const auto& r = solve(m2, m1);
-//        if (r.first)
-//                cout << r.second << endl;
-//        else
-//                cout << "cannot solve!" << endl;
+        //        Matrix<Fraction> m1{{0,1,2},{2,2,3},{4,1,6},{1,1,1},{2,1,1}};
+        //        Matrix<Fraction> m2{{2,0,1,2,3},{2,1,1,1,1},{1,3,2,1,2},{2,2,2,1,2},{1,0,1,2,1}};
+        //        const auto& r = solve(m2, m1);
+        //        if (r.first)
+        //                cout << r.second << endl;
+        //        else
+        //                cout << "cannot solve!" << endl;
 
-//        Matrix<Fraction<int>> m1{{1.00,2,string("6/2")},{4,1.0,2}, {0,5.0000,1}}, m2{{1},{1},{1}};
-//        Matrix<Fraction<int>> t =  mat_union(m1,m2);
-//        t.simplest_row_form();
-//        cout << t << endl;
+        //        Matrix<Fraction<int>> m1{{1.00,2,string("6/2")},{4,1.0,2}, {0,5.0000,1}}, m2{{1},{1},{1}};
+        //        Matrix<Fraction<int>> t =  mat_union(m1,m2);
+        //        t.simplest_row_form();
+        //        cout << t << endl;
         //cout << solve(m1,m2).second << endl;
 
         Matrix<Fraction<int>> m1{{1,2,3},{4,5,6}};

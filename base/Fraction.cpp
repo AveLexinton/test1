@@ -4,10 +4,10 @@
 
 //自定义Fraction max()
 namespace std {
-    template<>
-    Fraction<> numeric_limits<Fraction<>>::max() {
-        return Fraction<>(numeric_limits<long long>::max(), static_cast<long long>(1));
-    }
+        template<>
+                Fraction<> numeric_limits<Fraction<>>::max() {
+                        return Fraction<>(numeric_limits<long long>::max(), static_cast<long long>(1));
+                }
 }
 
 ////打印
@@ -107,11 +107,11 @@ namespace std {
 
 
 int main_fraction() {
-  //Fraction f{0,12};
-  //Fraction f2{1,25};
-  //cout << f/f2 << endl;
-  //Fraction f3("5/6");
-  //cout << -f3 << endl;
-  return 0;
+        //Fraction f{0,12};
+        //Fraction f2{1,25};
+        //cout << f/f2 << endl;
+        //Fraction f3("5/6");
+        //cout << -f3 << endl;
+        return 0;
 }
 

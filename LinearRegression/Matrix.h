@@ -38,7 +38,7 @@ class Matrix {
         };
         Matrix(const initializer_list<initializer_list<T>>& ilil) {
                 new(this) Matrix(vector<vector<T>>(ilil.begin(), ilil.end()));
-                
+
         }
         Matrix(const vector<vector<T>> & vec) {
                 data = move(vec);
@@ -121,21 +121,21 @@ class Matrix {
 
         //右边添加一列
         Matrix& addCol(const vector<T>& newcol) {
-            if (newcol.size() != nrow)
-                throw runtime_error("Error adding a column: rows does not match!");
-            for (int i = 0; i < newcol.size(); ++i)
-                data.at(i).push_back(newcol.at(i));
-            ++ncol;
-                
-            return *this;
+                if (newcol.size() != nrow)
+                        throw runtime_error("Error adding a column: rows does not match!");
+                for (int i = 0; i < newcol.size(); ++i)
+                        data.at(i).push_back(newcol.at(i));
+                ++ncol;
+
+                return *this;
         }
         //下边添加一行
         Matrix& addRow(const vector<T>& newrow) {
-            if (newrow.size() != ncol)
-                throw runtime_error("Error adding a row: columns does not match!");
-            data.push_back(newrow);
-            ++nrow;
-            return *this;
+                if (newrow.size() != ncol)
+                        throw runtime_error("Error adding a row: columns does not match!");
+                data.push_back(newrow);
+                ++nrow;
+                return *this;
         }
 
         //删除矩阵中的一行,行号从0开始，默认删除最后一行
@@ -147,12 +147,12 @@ class Matrix {
         }
         //删除矩阵中指定一列，默认删除最后一列
         void rm_col(int colno=getNcol()-1) {
-            if (colno>=ncol)
-                throw out_of_range("Error removing one column: out of range!");
-            for(auto& r : data) {
-                r.erase(r.begin()+getNcol()-1);
-            }
-            --ncol;
+                if (colno>=ncol)
+                        throw out_of_range("Error removing one column: out of range!");
+                for(auto& r : data) {
+                        r.erase(r.begin()+getNcol()-1);
+                }
+                --ncol;
         }
 
         //矩阵转置
